@@ -138,7 +138,11 @@ local function gather_system_infos(compile_env)
   local infos = {}
 
   local ulimit, err = get_ulimit()
-  if not ulimit then return nil, err end
+  if not ulimit then 
+    return nil, err 
+  elseif tostring(ulimit):lower():match("unlimited") then
+    ulimit = 65536
+  end
 
   infos.worker_rlimit = ulimit
   infos.worker_connections = math.min(16384, ulimit)
